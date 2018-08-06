@@ -1,6 +1,9 @@
-﻿using System;
+﻿using MyPipeline.Middleware;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MyPipeline.Extensions;
+using MyPipeline.Services;
 
 namespace MyPipeline
 {
@@ -11,8 +14,82 @@ namespace MyPipeline
         static void Main(string[] args)
         {
             // Console.WriteLine("Hello World!");
-            DoProccess1();
+            DoProcess3();
+
+            ServiceBuilder s = new ServiceBuilder();
+            s.AddMvc("ss");
         }
+
+        static void DoProcess3()
+        {
+            UseSayAWord("you");
+            UseSayAWord("complete");
+
+            UseSayAWord("me");
+            UseCustomMiddleWare("this is extra middleware");
+            RequestDelegate end = (context) => {
+                Console.WriteLine("ending ....");
+                return Task.CompletedTask;
+            };
+            //倒置，使得后面的 requestdelegate 作为前面中间件的next
+            _list.Reverse();
+            //middleware.Invoke ，完成requestdelegate方法上的连接
+            foreach (var middleware in _list)
+            {
+                end = middleware.Invoke(end);
+            }
+
+            end.Invoke(new Context());
+            Console.ReadLine();    
+        }
+
+        static void UseCustomMiddleWare(string aa)
+        {
+            //RequestDelegate next1 = context1 => { string ss = ""; return Task.CompletedTask; };
+            //RequestDelegate r = context1 =>
+            //{
+            //    CustomMiddleware middleware = new CustomMiddleware(next1);
+            //    Task t = middleware.Invoke(context1, " this is extra middleware");
+            //    return t;
+            //};
+
+
+
+            Use(next =>
+                context => {
+                    AuthendicationMiddleware middleware = new AuthendicationMiddleware(next);
+                    return middleware.Invoke(context, aa);
+                }
+            );
+        }
+
+
+        static void UseSayAWord(string word)
+{
+    Use(next =>
+    {
+        return (context=>
+        {
+            Console.Write(word+ " ");
+            Task t= next.Invoke(context);
+            return t;
+        });
+        
+    }
+    );
+}
+
+        static void UseSayAwords(string ss)
+        {
+            Use(_next =>
+            {
+                return (options => { Console.WriteLine(ss); return _next.Invoke(options); }
+
+                );
+            }
+                );
+        }
+
         static void DoProccess2()
         {
             Use((next) =>
@@ -69,9 +146,11 @@ namespace MyPipeline
             });
 
             Use((next) => {
+                return (context) =>
                 {
                     Console.WriteLine("log begin");
                     Task t = next.Invoke(context);
+                    Console.WriteLine("log end");
                     return t;
                 };
             });
@@ -87,6 +166,12 @@ namespace MyPipeline
             }
             end.Invoke(new Context());
             Console.ReadLine();
+        }
+
+
+        static void DoProcess4()
+        {
+
         }
 
         //传入Func<RequestDelegate , RequestDelegate>类型的 middleware， 加入_list 但还没有调用，待使用
