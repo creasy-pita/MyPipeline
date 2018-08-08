@@ -11,18 +11,18 @@ namespace MyPipeline.Extensions
         public static void UseMvc(this Program p,string extraPara)
         {
             
-            Program.Use(next =>
-                {
-                    return context =>
-                    {
-                        MvcMiddleware middleware = new MvcMiddleware(next);
-                        next.Invoke(context);
-                        return Task.CompletedTask;
-                    };
-                }
+            //Program.Use(next =>
+            //    {
+            //        return context =>
+            //        {
+            //            MvcMiddleware middleware = new MvcMiddleware(next);
+            //            next.Invoke(context);
+            //            return Task.CompletedTask;
+            //        };
+            //    }
 
                 
-                );
+            //    );
         }
     }
 }
