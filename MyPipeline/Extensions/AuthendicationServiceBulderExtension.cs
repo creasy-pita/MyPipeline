@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyPipeline.Extensions
 {
-    static class AuthendicationExtension
+    static class AuthendicationServiceBulderExtension
     {
         public static void AddAuthendication(this ServiceBuilder  s,string extraPara)
         {
