@@ -57,18 +57,12 @@ Use() 时 使用匿名方式定义中间件， 并加入到 list
 	
 	FunType middleware1(FunType f,int x)
 	{
-		return {
-		//middleware1 logic
-		//....
-		f(x);}
+		return a;
 	}
 	
 	FunType middleware2(FunType f,int x)
 	{
-		return {
-		//middleware1 logic
-		//....
-		f(x);}
+		return b;
 	}	
 	void a(){
 		//middleware1 logic

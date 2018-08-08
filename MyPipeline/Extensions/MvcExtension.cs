@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyPipeline.Extensions
 {
-    static class ServiceBuilderExtension
+    static class MvcExtension
     {
         public static void AddMvc(this ServiceBuilder  s,string extraPara)
         {

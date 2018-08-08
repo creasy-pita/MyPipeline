@@ -14,7 +14,7 @@ namespace MyPipeline
         {
             // Console.WriteLine("Hello World!");
             _serviceBuilder = new ServiceBuilder();
-            DoProcess3();
+            DoProcess4();
         }
 
         static void DoProcess3()
@@ -155,7 +155,9 @@ namespace MyPipeline
 
         static void DoProcess4()
         {
-
+            _serviceBuilder.AddMvc("Mvc  donging ...");
+            _serviceBuilder.AddAuthendication("Authendication doing...");
+            _serviceBuilder.Run();
         }
 
         //传入Func<RequestDelegate , RequestDelegate>类型的 middleware， 加入_list 但还没有调用，待使用
