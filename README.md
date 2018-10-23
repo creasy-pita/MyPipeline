@@ -75,3 +75,29 @@ Use() 时 使用匿名方式定义中间件， 并加入到 list
 		f(x);
 	}	
 	
+2018-10-23
+1 use(Fun<RequestDelegate,RequestDelegate> fun)中 RequestDelegate 设置方式 
+	1 可以是lambda 表达式，
+	2 可以是符合已经定义好的函数
+2 为甚么需要传入一个  RequestDelegate 时 还要返回 RequestDelegate
+	List<Fun<RequestDelegate,RequestDelegate>>  中  每个Fun<RequestDelegate,RequestDelegate> 的 next参数需要给定 形成一条方法链 chain of function
+3 如何实现自定义 Middleware 并加入到 app中
+	参考 UseMvc
+4 自动自定义 Middleware  可传入定制的 lambda 表达式
+	比如 EFcore 中的 
+	            services.AddDbContext<ProjectContext>(options =>
+					{
+						options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")
+						//, builder=>
+						//builder.MigrationsAssembly(typeof(ProjectContext).Assembly.GetName().Name)
+						,b => b.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)
+						
+						);
+					}
+				);
+		services.AddCustomizeMiddleWare(options =>
+		{
+			...
+		}
+	);
+

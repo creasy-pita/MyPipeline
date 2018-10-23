@@ -11,21 +11,18 @@ namespace MyPipeline.Extensions
     {
         public static void AddAuthendication(this ServiceBuilder  s,string extraPara)
         {
-            Console.WriteLine(extraPara);
+            //Console.WriteLine(extraPara);
+            s.Use(next =>
+            {
+                return context =>
+                {
+                    AuthendicationMiddleware middleware = new AuthendicationMiddleware(next);
+                    middleware.Invoke(context, extraPara);
+                    return Task.CompletedTask;
+                };
+            }
 
-
-            //Program.Use(next =>
-            //    {
-            //        return context =>
-            //        {
-            //            MvcMiddleware middleware = new MvcMiddleware(next);
-            //            next.Invoke(context);
-            //            return Task.CompletedTask;
-            //        };
-            //    }
-
-                
-            //    );
+            );
         }
     }
 }

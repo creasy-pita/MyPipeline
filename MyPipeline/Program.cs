@@ -61,6 +61,17 @@ namespace MyPipeline
         
             }
             );
+
+
+            _serviceBuilder.Use( next=> {
+                return (context => 
+                            {
+                                Console.Write("");
+                                Task t= next.Invoke(context);
+                                return t;
+                            });
+            });
+            _serviceBuilder.Use(next => { return ggg; });//可以返回定义好 符合 RequestDelegate 的 函数
         }
 
         static void UseSayAwords(string ss)
@@ -161,9 +172,9 @@ namespace MyPipeline
         }
 
         //传入Func<RequestDelegate , RequestDelegate>类型的 middleware， 加入_list 但还没有调用，待使用
-
-
-
-
+        public static Task ggg(Context context)
+        {
+            return Task.CompletedTask;
+        }
     }
 }
